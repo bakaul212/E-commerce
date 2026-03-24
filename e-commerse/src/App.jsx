@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { CartProvider, useCart } from './CartContext';
 import './App.css';
 
-// প্রোডাক্ট ডাটাবেস - এখানে আপনার ফোল্ডারের ছবির পাথ দেওয়া হয়েছে
+// assets ফোল্ডার থেকে ছবি ডাইনামিকভাবে লোড করার ফাংশন
+const getAssetUrl = (name) => new URL(`./assets/${name}`, import.meta.url).href;
+
 const products = [
-  { id: 1, name: "Premium Headphone", price: 2500, img: "/images/headphone.jpg", tag: "Electronics", featured: true, recommended: false },
-  { id: 2, name: "Smart Watch v2", price: 4500, img: "/images/watch.jpg", tag: "Gadget", featured: true, recommended: true },
-  { id: 3, name: "Mechanical Keyboard", price: 3200, img: "/images/keyboard.jpg", tag: "PC", featured: false, recommended: true },
-  { id: 4, name: "Gaming Mouse", price: 1500, img: "/images/mouse.jpg", tag: "PC", featured: false, recommended: false },
-  { id: 5, name: "Wireless Earbuds", price: 2200, img: "/images/earbuds.jpg", tag: "Electronics", featured: true, recommended: false },
-  { id: 6, name: "Power Bank 20k", price: 1800, img: "/images/powerbank.jpg", tag: "Gadget", featured: false, recommended: true },
+  { id: 1, name: "Premium Headphone", price: 2500, img: getAssetUrl('headphone.jpg'), tag: "Electronics", featured: true, recommended: false },
+  { id: 2, name: "Smart Watch v2", price: 4500, img: getAssetUrl('watch.jpg'), tag: "Gadget", featured: true, recommended: true },
+  { id: 3, name: "Mechanical Keyboard", price: 3200, img: getAssetUrl('keyboard.jpg'), tag: "PC", featured: false, recommended: true },
+  { id: 4, name: "Gaming Mouse", price: 1500, img: getAssetUrl('mouse.jpg'), tag: "PC", featured: false, recommended: false },
+  { id: 5, name: "Wireless Earbuds", price: 2200, img: getAssetUrl('earbuds.jpg'), tag: "Electronics", featured: true, recommended: false },
+  { id: 6, name: "Power Bank 20k", price: 1800, img: getAssetUrl('powerbank.jpg'), tag: "Gadget", featured: false, recommended: true },
 ];
 
 function App() {
@@ -17,7 +19,6 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // ফিল্টারিং লজিক
   const filteredProducts = products.filter(p => {
     const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || p.tag === selectedCategory;
@@ -30,10 +31,8 @@ function App() {
   return (
     <CartProvider>
       <div className="ecom-app">
-        {/* Navbar Section */}
         <Navbar toggleCart={() => setIsCartOpen(true)} />
 
-        {/* Hero Section */}
         <header id="home" className="hero-gradient">
           <div className="hero-content">
             <span className="badge">New Tech Arrival 2026</span>
@@ -46,7 +45,6 @@ function App() {
           </div>
         </header>
 
-        {/* Featured Section */}
         <section id="featured" className="section featured-bg">
           <h2 className="section-title">🔥 Featured Items</h2>
           <div className="product-grid">
@@ -54,10 +52,8 @@ function App() {
           </div>
         </section>
 
-        {/* Shop Section with Colorful Filters */}
         <section id="shop" className="section shop-bg">
           <h2 className="section-title">🛍️ Explore All Products</h2>
-          
           <div className="filter-wrapper">
             <div className="search-container">
               <input 
@@ -68,7 +64,6 @@ function App() {
               />
               <span className="search-icon">🔍</span>
             </div>
-            
             <div className="category-tabs">
               {['All', 'Electronics', 'Gadget', 'PC'].map(cat => (
                 <button 
@@ -81,7 +76,6 @@ function App() {
               ))}
             </div>
           </div>
-
           <div className="product-grid">
             {filteredProducts.length > 0 ? (
               filteredProducts.map(p => <ProductCard key={p.id} product={p} />)
@@ -91,56 +85,38 @@ function App() {
           </div>
         </section>
 
-        {/* Recommended Section */}
         <section id="recommended" className="section recommended-bg">
           <h2 className="section-title">⭐ Recommended For You</h2>
           <div className="product-grid">
             {recommendedProducts.map(p => <ProductCard key={p.id} product={p} />)}
           </div>
         </section>
-         {/* About Section */}
-  <section id="about" className="about-modern-section">
-  <div className="about-container">
-    <div className="about-header">
-      <span className="mini-title">WHO WE ARE</span>
-      <h2>About <span>Hosen  Store</span></h2>
-      <div className="title-line"></div>
-    </div>
-    
-    <div className="about-content">
-      <p>
-        Founded by <b>Md Hosen Bakaul</b>, we are committed to bringing you the most 
-        authentic and high-quality gadgets. Quality and customer satisfaction 
-        are our top priorities in this modern era of technology.
-      </p>
-    </div>
 
-    <div className="stats-grid">
-      <div className="stat-card">
-        <h3>10k+</h3>
-        <p>Happy Customers</p>
-      </div>
-      <div className="stat-card">
-        <h3>500+</h3>
-        <p>Premium Items</p>
-      </div>
-      <div className="stat-card">
-        <h3>24/7</h3>
-        <p>Expert Support</p>
-      </div>
-    </div>
-  </div>
-</section>
+        <section id="about" className="about-modern-section">
+          <div className="about-container">
+            <div className="about-header">
+              <span className="mini-title">WHO WE ARE</span>
+              <h2>About <span className="hosen-text">Hosen</span> <span className="store-text">Store</span></h2>
+              <div className="title-line"></div>
+            </div>
+            <div className="about-content">
+              <p>Founded by <b>Md Hosen Bakaul</b>, we are committed to bringing you the most authentic and high-quality gadgets.</p>
+            </div>
+            <div className="stats-grid">
+              <div className="stat-card"><h3>10k+</h3><p>Happy Customers</p></div>
+              <div className="stat-card"><h3>500+</h3><p>Premium Items</p></div>
+              <div className="stat-card"><h3>24/7</h3><p>Expert Support</p></div>
+            </div>
+          </div>
+        </section>
 
-        {/* Cart Window */}
         <CartModal isOpen={isCartOpen} closeCart={() => setIsCartOpen(false)} />
-        
-        {/* Premium Footer */}
+
         <footer className="footer-premium">
           <div className="footer-top">
             <div className="footer-brand">
               <div className="logo">HOSEN<span>STORE</span></div>
-              <p>Your ultimate destination for the latest technology and premium gadgets in Bangladesh.</p>
+              <p>Your ultimate destination for premium gadgets in Bangladesh.</p>
             </div>
             <div className="footer-links">
               <h4>Explore</h4>
@@ -153,9 +129,6 @@ function App() {
               <h4>Contact Info</h4>
               <p>📍 Dhaka, Bangladesh</p>
               <p>📧 hosen@store.com</p>
-              <div className="social-icons">
-                <span>FB</span> <span>IG</span> <span>TW</span> <span>LI</span>
-              </div>
             </div>
           </div>
           <div className="footer-bottom">
@@ -168,27 +141,22 @@ function App() {
 }
 
 // --- Sub-Components ---
-
 function Navbar({ toggleCart }) {
   const { cart } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <nav className="glass-nav">
       <div className="nav-container">
         <div className="logo">HOSEN<span>STORE</span></div>
-        
         <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? '✕' : '☰'}
         </div>
-
         <ul className={`nav-links ${isMenuOpen ? 'mobile-active' : ''}`}>
           <li><a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a></li>
           <li><a href="#featured" onClick={() => setIsMenuOpen(false)}>Featured</a></li>
           <li><a href="#shop" onClick={() => setIsMenuOpen(false)}>Shop</a></li>
           <li><a href="#about" onClick={() => setIsMenuOpen(false)}>About</a></li>
         </ul>
-
         <div className="nav-right">
           <button className="cart-pill" onClick={toggleCart}>
              <span>🛒</span> <span className="count">{cart.length}</span>
@@ -202,13 +170,9 @@ function Navbar({ toggleCart }) {
 function ProductCard({ product }) {
   const { addToCart, toggleWishlist, wishlist } = useCart();
   const isWishlisted = wishlist.find(item => item.id === product.id);
-
   return (
     <div className="modern-card">
-      <button 
-        className={`wish-icon ${isWishlisted ? 'active' : ''}`} 
-        onClick={() => toggleWishlist(product)}
-      >
+      <button className={`wish-icon ${isWishlisted ? 'active' : ''}`} onClick={() => toggleWishlist(product)}>
         {isWishlisted ? '❤️' : '🤍'}
       </button>
       <div className="card-image-box">
@@ -228,18 +192,13 @@ function ProductCard({ product }) {
 
 function CartModal({ isOpen, closeCart }) {
   const { cart, removeFromCart, totalPrice } = useCart();
-
   return (
     <div className={`cart-overlay ${isOpen ? 'active' : ''}`} onClick={closeCart}>
       <div className={`cart-slide-panel ${isOpen ? 'open' : ''}`} onClick={e => e.stopPropagation()}>
-        
-        {/* Cart Header */}
         <div className="cart-panel-header">
           <h3>Shopping Bag <span>({cart.length})</span></h3>
           <button className="panel-close-btn" onClick={closeCart}>✕</button>
         </div>
-
-        {/* Cart Items List */}
         <div className="cart-panel-body">
           {cart.length === 0 ? (
             <div className="empty-cart-state">
@@ -257,23 +216,15 @@ function CartModal({ isOpen, closeCart }) {
                   <h4>{item.name}</h4>
                   <p className="item-price">{item.price}৳</p>
                 </div>
-                <button className="delete-item-btn" onClick={() => removeFromCart(item.cartId)}>
-                  🗑️
-                </button>
+                <button className="delete-item-btn" onClick={() => removeFromCart(item.cartId)}>🗑️</button>
               </div>
             ))
           )}
         </div>
-
-        {/* Cart Footer */}
         {cart.length > 0 && (
           <div className="cart-panel-footer">
-            <div className="total-summary">
-               <span>Total Amount</span>
-               <span className="total-price">{totalPrice}৳</span>
-            </div>
-            <button className="checkout-now-btn">Proceed to Checkout</button>
-            <p className="shipping-info">Free shipping on all orders above 5000৳</p>
+            <div className="total-summary"><span>Total</span><span className="total-price">{totalPrice}৳</span></div>
+            <button className="checkout-now-btn">Checkout Now</button>
           </div>
         )}
       </div>
