@@ -103,7 +103,7 @@ function App() {
   <div className="about-container">
     <div className="about-header">
       <span className="mini-title">WHO WE ARE</span>
-      <h2>About <span>Hosen Store</span></h2>
+      <h2>About <span>Hosen  Store</span></h2>
       <div className="title-line"></div>
     </div>
     
@@ -228,43 +228,54 @@ function ProductCard({ product }) {
 
 function CartModal({ isOpen, closeCart }) {
   const { cart, removeFromCart, totalPrice } = useCart();
-  if (!isOpen) return null;
 
   return (
-    <div className="cart-overlay" onClick={closeCart}>
-      <div className="cart-slide" onClick={e => e.stopPropagation()}>
-        <div className="cart-top">
-          <h2>Your Bag</h2>
-          <button className="close-btn" onClick={closeCart}>✕</button>
+    <div className={`cart-overlay ${isOpen ? 'active' : ''}`} onClick={closeCart}>
+      <div className={`cart-slide-panel ${isOpen ? 'open' : ''}`} onClick={e => e.stopPropagation()}>
+        
+        {/* Cart Header */}
+        <div className="cart-panel-header">
+          <h3>Shopping Bag <span>({cart.length})</span></h3>
+          <button className="panel-close-btn" onClick={closeCart}>✕</button>
         </div>
-        <div className="cart-body">
+
+        {/* Cart Items List */}
+        <div className="cart-panel-body">
           {cart.length === 0 ? (
-            <div className="empty-cart">
-               <p>🎒 Your cart is empty!</p>
-               <button className="btn-primary" onClick={closeCart}>Go Shopping</button>
+            <div className="empty-cart-state">
+               <span className="empty-icon">🛒</span>
+               <p>Your bag is empty!</p>
+               <button className="shop-now-btn" onClick={closeCart}>Shop Now</button>
             </div>
           ) : (
             cart.map(item => (
-              <div key={item.cartId} className="cart-item-modern">
-                <div className="item-img-small">
+              <div key={item.cartId} className="modern-cart-item">
+                <div className="item-img-container">
                    <img src={item.img} alt={item.name} />
                 </div>
-                <div className="item-info">
+                <div className="item-details">
                   <h4>{item.name}</h4>
-                  <p>{item.price}৳</p>
+                  <p className="item-price">{item.price}৳</p>
                 </div>
-                <button className="remove-btn" onClick={() => removeFromCart(item.cartId)}>🗑️</button>
+                <button className="delete-item-btn" onClick={() => removeFromCart(item.cartId)}>
+                  🗑️
+                </button>
               </div>
             ))
           )}
         </div>
-        <div className="cart-checkout">
-          <div className="total-row">
-             <span>Subtotal</span>
-             <span>{totalPrice}৳</span>
+
+        {/* Cart Footer */}
+        {cart.length > 0 && (
+          <div className="cart-panel-footer">
+            <div className="total-summary">
+               <span>Total Amount</span>
+               <span className="total-price">{totalPrice}৳</span>
+            </div>
+            <button className="checkout-now-btn">Proceed to Checkout</button>
+            <p className="shipping-info">Free shipping on all orders above 5000৳</p>
           </div>
-          <button className="btn-pay" disabled={cart.length === 0}>Proceed to Payment</button>
-        </div>
+        )}
       </div>
     </div>
   );

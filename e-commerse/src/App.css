@@ -518,6 +518,144 @@ body {
   color: #64748b;
   font-size: 0.9rem;
 }
+/* --- Side Drawer Cart Styles --- */
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4); /* ডার্ক ট্রান্সপারেন্ট ব্যাকগ্রাউন্ড */
+  backdrop-filter: blur(4px);
+  z-index: 5000;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.4s ease;
+}
+
+.cart-overlay.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.cart-slide-panel {
+  position: absolute;
+  top: 0;
+  right: -100%; /* শুরুতে স্ক্রিনের বাইরে থাকবে */
+  width: 100%;
+  max-width: 420px;
+  height: 100%;
+  background: white;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cart-slide-panel.open {
+  right: 0; /* স্লাইড করে ভেতরে আসবে */
+}
+
+/* Header */
+.cart-panel-header {
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  background: #f8fafc;
+}
+
+.cart-panel-header h3 { font-size: 1.25rem; font-weight: 800; }
+.cart-panel-header h3 span { color: var(--primary); font-size: 1rem; }
+.panel-close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b; }
+
+/* Body Area */
+.cart-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.modern-cart-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #fff;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #f1f5f9;
+  transition: 0.3s;
+}
+
+.modern-cart-item:hover { border-color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+
+.item-img-container {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.item-img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+.item-details h4 { font-size: 0.95rem; margin-bottom: 5px; color: #1e293b; }
+.item-price { font-weight: 700; color: var(--primary); }
+
+.delete-item-btn {
+  margin-left: auto;
+  background: #fee2e2;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  filter: grayscale(1);
+}
+.delete-item-btn:hover { filter: grayscale(0); background: #fecaca; }
+
+/* Footer */
+.cart-panel-footer {
+  padding: 25px;
+  background: white;
+  border-top: 1px solid #f1f5f9;
+  box-shadow: 0 -10px 20px rgba(0,0,0,0.02);
+}
+
+.total-summary {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.total-price { color: #10b981; font-size: 1.4rem; }
+
+.checkout-now-btn {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.checkout-now-btn:hover { background: var(--primary); transform: translateY(-2px); }
+
+.shipping-info {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 15px;
+}
+
+/* Empty State */
+.empty-cart-state { text-align: center; padding-top: 100px; }
+.empty-icon { font-size: 4rem; display: block; margin-bottom: 20px; }
+.shop-now-btn { margin-top: 20px; padding: 10px 25px; border-radius: 30px; border: 2px solid var(--primary); background: transparent; color: var(--primary); font-weight: 700; cursor: pointer; }
 
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {
@@ -528,6 +666,17 @@ body {
   .about-header h2 { font-size: 2rem; }
   .about-modern-section { padding: 60px 5%; }
   .stats-grid { grid-template-columns: 1fr; }
+}
+/* মোবাইল রেসপনসিভনেস আরও নিখুঁত করতে */
+@media (max-width: 600px) {
+  .card-image-box {
+    height: auto;      /* ফিক্সড হাইট সরিয়ে অটো দিন */
+    aspect-ratio: 1 / 1; /* মোবাইলে চারকোণা বক্স দেখালে ছবি ভালো দেখায় */
+  }
+  
+  .modern-card {
+    padding: 15px;     /* কার্ডের ভেতরের স্পেস একটু কমানো */
+  }
 }
 @media (max-width: 768px) {
   .menu-icon { display: block; }
